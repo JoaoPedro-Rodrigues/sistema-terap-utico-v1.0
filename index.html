@@ -2,43 +2,49 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#5A4438">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Terapia Online — Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="dashboard">
 
+<!-- Overlay escuro para fechar sidebar no mobile -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <h1>Terapia<br>Online</h1>
     <span>Sistema Terapêutico</span>
   </div>
   <nav class="sidebar-nav">
     <span class="nav-section-label">Principal</span>
-    <a href="index.html" class="nav-item active">
+    <a href="index.html" class="nav-item active" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
       Dashboard
     </a>
-    <a href="pages/pacientes.html" class="nav-item">
+    <a href="pages/pacientes.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       Pacientes
     </a>
-    <a href="pages/sessoes.html" class="nav-item">
+    <a href="pages/sessoes.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
       Sessões
     </a>
     <span class="nav-section-label">Protocolo</span>
-    <a href="pages/acompanhamento.html" class="nav-item">
+    <a href="pages/acompanhamento.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
       Acompanhamento
     </a>
-    <a href="pages/relatorios.html" class="nav-item">
+    <a href="pages/relatorios.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
       Relatórios
     </a>
     <span class="nav-section-label">Ferramentas</span>
-    <a href="pages/ficha.html" class="nav-item">
+    <a href="pages/ficha.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2H5a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-6-6z"/><path d="M9 2v6h6M7 13h6M7 16h4"/></svg>
       Ficha Terapêutica
     </a>
@@ -57,26 +63,28 @@
 <!-- MAIN -->
 <main class="main">
   <header class="topbar">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
     <h2 class="topbar-title">Dashboard</h2>
     <div class="topbar-actions">
-      <span id="data-hoje" class="text-sm text-muted"></span>
+      <span id="topbar-date" class="text-sm text-muted topbar-date"></span>
       <a href="pages/pacientes.html" class="btn btn-primary btn-sm">+ Novo paciente</a>
     </div>
   </header>
 
   <div class="content">
 
-    <!-- KPIs -->
     <div class="stats-grid">
       <div class="stat-card green">
         <p class="stat-label">Pacientes ativos</p>
         <p class="stat-value" id="dash-ativos">—</p>
-        <p class="stat-change up" id="dash-ativos-change">↑ protocolo em andamento</p>
+        <p class="stat-change up">↑ protocolo em andamento</p>
       </div>
       <div class="stat-card sage">
         <p class="stat-label">Sessões totais</p>
         <p class="stat-value" id="dash-sessoes">—</p>
-        <p class="stat-change" id="dash-sessoes-change" style="color:var(--muted)">registradas no sistema</p>
+        <p class="stat-change" style="color:var(--muted)">registradas no sistema</p>
       </div>
       <div class="stat-card gold">
         <p class="stat-label">Score médio</p>
@@ -86,14 +94,11 @@
       <div class="stat-card bark">
         <p class="stat-label">Concluídos</p>
         <p class="stat-value" id="dash-concluidos">—</p>
-        <p class="stat-change" style="color:var(--muted)">protocolo de 3 meses</p>
+        <p class="stat-change" style="color:var(--muted)">protocolo 3 meses</p>
       </div>
     </div>
 
-    <!-- Alertas e próximas ações -->
     <div class="grid-2 mb-24">
-
-      <!-- Pacientes em acompanhamento ativo -->
       <div class="card">
         <div class="card-header">
           <div>
@@ -105,7 +110,6 @@
         <div id="dash-pacientes-lista"></div>
       </div>
 
-      <!-- Ações rápidas -->
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Ações rápidas</h3>
@@ -132,7 +136,6 @@
             Ficha terapêutica digital
           </a>
         </div>
-
         <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
           <p class="text-xs text-muted mb-8">INTEGRAÇÕES PREVISTAS</p>
           <div style="display:flex;flex-wrap:wrap;gap:6px">
@@ -146,7 +149,6 @@
       </div>
     </div>
 
-    <!-- Últimas sessões -->
     <div class="card">
       <div class="card-header">
         <div>
@@ -161,8 +163,8 @@
             <tr>
               <th>Data</th>
               <th>Paciente</th>
-              <th>Técnica</th>
-              <th>Score antes → depois</th>
+              <th class="hide-mobile">Técnica</th>
+              <th>Score</th>
               <th>Evolução</th>
             </tr>
           </thead>
@@ -174,77 +176,87 @@
   </div>
 </main>
 
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="index.html" class="bottom-nav-item active">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Início
+    </a>
+    <a href="pages/pacientes.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Pacientes
+    </a>
+    <a href="pages/sessoes.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+      Sessões
+    </a>
+    <a href="pages/acompanhamento.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
+      Protocolo
+    </a>
+    <a href="pages/relatorios.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
+      Relatórios
+    </a>
+  </div>
+</nav>
+
 <script src="js/app.js"></script>
+<script src="js/mobile.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Data de hoje
   const hoje = new Date();
-  document.getElementById('data-hoje').textContent = hoje.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const el = document.getElementById('topbar-date');
+  if (el) el.textContent = hoje.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
 
   const pacientes = DB.get('pacientes') || [];
   const sessoes   = DB.get('sessoes')   || [];
 
-  // KPIs
   const ativos     = pacientes.filter(p => p.status === 'ativo');
   const concluidos = pacientes.filter(p => p.status === 'concluido');
   const scores     = pacientes.filter(p => p.score && scoreMediaPaciente(p) > 0).map(p => scoreMediaPaciente(p));
   const mediaGeral = scores.length ? (scores.reduce((a,b) => a+b,0) / scores.length).toFixed(1) : '—';
 
-  document.getElementById('dash-ativos').textContent      = ativos.length;
-  document.getElementById('dash-sessoes').textContent     = sessoes.length;
-  document.getElementById('dash-score').textContent       = mediaGeral !== '—' ? mediaGeral + '/10' : '—';
-  document.getElementById('dash-concluidos').textContent  = concluidos.length;
+  document.getElementById('dash-ativos').textContent     = ativos.length;
+  document.getElementById('dash-sessoes').textContent    = sessoes.length;
+  document.getElementById('dash-score').textContent      = mediaGeral !== '—' ? mediaGeral + '/10' : '—';
+  document.getElementById('dash-concluidos').textContent = concluidos.length;
 
-  // Lista pacientes em protocolo
   const lista = document.getElementById('dash-pacientes-lista');
   const pacAtivos = ativos.slice(0, 5);
   lista.innerHTML = pacAtivos.length === 0
     ? '<p class="text-sm text-muted">Nenhum paciente ativo.</p>'
     : pacAtivos.map(p => {
         const media = scoreMediaPaciente(p);
-        return `
-          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
-            <div class="avatar ${p.cor}">${p.avatar}</div>
-            <div style="flex:1">
-              <p style="font-weight:500;font-size:.875rem">${p.nome}</p>
-              <p class="text-xs text-muted">Semana ${p.semana}/12</p>
-            </div>
-            <div style="text-align:right">
-              <p style="font-family:var(--font-display);font-size:1.1rem;color:${media >= 7 ? 'var(--success)' : media >= 4 ? 'var(--gold)' : 'var(--danger)'}">${media > 0 ? media : '—'}</p>
-              <p class="text-xs text-muted">score</p>
-            </div>
+        return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div class="avatar ${p.cor}">${p.avatar}</div>
+          <div style="flex:1;min-width:0">
+            <p style="font-weight:500;font-size:.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.nome}</p>
+            <p class="text-xs text-muted">Semana ${p.semana}/12</p>
           </div>
-        `;
+          <div style="text-align:right;flex-shrink:0">
+            <p style="font-family:var(--font-display);font-size:1.1rem;color:${media>=7?'var(--success)':media>=4?'var(--gold)':'var(--danger)'}">${media>0?media:'—'}</p>
+            <p class="text-xs text-muted">score</p>
+          </div>
+        </div>`;
       }).join('');
 
-  // Últimas sessões
   const tbody = document.getElementById('dash-sessoes-tbody');
-  const ultimas = sessoes
-    .sort((a, b) => b.data.localeCompare(a.data))
-    .slice(0, 5)
-    .map(s => ({ ...s, pac: pacientes.find(p => p.id === s.pacienteId) }));
+  const ultimas = sessoes.sort((a,b) => b.data.localeCompare(a.data)).slice(0,5).map(s => ({...s, pac: pacientes.find(p => p.id === s.pacienteId)}));
 
   tbody.innerHTML = ultimas.length === 0
     ? '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">Nenhuma sessão registrada.</td></tr>'
     : ultimas.map(s => {
-        const antes  = s.scorePre  ? Math.round((s.scorePre.ansiedade  + s.scorePre.humor)  / 2) : 0;
-        const depois = s.scorePos  ? Math.round((s.scorePos.ansiedade  + s.scorePos.humor)  / 2) : 0;
-        return `
-          <tr>
-            <td><span class="text-sm">${formatDate(s.data)}</span></td>
-            <td>
-              ${s.pac ? `<div class="avatar-group">
-                <div class="avatar ${s.pac.cor}">${s.pac.avatar}</div>
-                <span class="avatar-group-name">${s.pac.nome}</span>
-              </div>` : '—'}
-            </td>
-            <td><span class="text-sm text-muted">${s.tecnica}</span></td>
-            <td>
-              <span class="text-sm">${antes > 0 ? antes + ' → ' + depois : '—'}</span>
-            </td>
-            <td>${evolucaoBadge(s.evolucao)}</td>
-          </tr>
-        `;
+        const antes  = s.scorePre ? Math.round((s.scorePre.ansiedade + s.scorePre.humor) / 2) : 0;
+        const depois = s.scorePos ? Math.round((s.scorePos.ansiedade + s.scorePos.humor) / 2) : 0;
+        return `<tr>
+          <td><span class="text-sm">${formatDate(s.data)}</span></td>
+          <td>${s.pac ? `<div class="avatar-group"><div class="avatar ${s.pac.cor}">${s.pac.avatar}</div><span class="avatar-group-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${s.pac.nome}</span></div>` : '—'}</td>
+          <td class="hide-mobile"><span class="text-sm text-muted">${s.tecnica}</span></td>
+          <td><span class="text-sm">${antes>0?antes+' → '+depois:'—'}</span></td>
+          <td>${evolucaoBadge(s.evolucao)}</td>
+        </tr>`;
       }).join('');
 });
 </script>

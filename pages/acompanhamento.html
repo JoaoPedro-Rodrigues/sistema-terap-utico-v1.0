@@ -2,42 +2,48 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#5A4438">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Terapia Online — Acompanhamento</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body data-page="acompanhamento">
 
-<aside class="sidebar">
+
+<!-- Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <h1>Terapia<br>Online</h1>
     <span>Sistema Terapêutico</span>
   </div>
   <nav class="sidebar-nav">
     <span class="nav-section-label">Principal</span>
-    <a href="../index.html" class="nav-item">
+    <a href="../index.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
       Dashboard
     </a>
-    <a href="pacientes.html" class="nav-item">
+    <a href="pacientes.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       Pacientes
     </a>
-    <a href="sessoes.html" class="nav-item">
+    <a href="sessoes.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
       Sessões
     </a>
     <span class="nav-section-label">Protocolo</span>
-    <a href="acompanhamento.html" class="nav-item active">
+    <a href="acompanhamento.html" class="nav-item active" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
       Acompanhamento
     </a>
-    <a href="relatorios.html" class="nav-item">
+    <a href="relatorios.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
       Relatórios
     </a>
     <span class="nav-section-label">Ferramentas</span>
-    <a href="ficha.html" class="nav-item">
+    <a href="ficha.html" class="nav-item" onclick="closeSidebar()">
       <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2H5a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-6-6z"/></svg>
       Ficha Terapêutica
     </a>
@@ -55,6 +61,7 @@
 
 <main class="main">
   <header class="topbar">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
     <h2 class="topbar-title">Acompanhamento — Protocolo 3 meses</h2>
     <div class="topbar-actions">
       <button class="btn btn-primary btn-sm" onclick="openModal('modal-checkin')">+ Check-in</button>
@@ -235,5 +242,33 @@ document.getElementById('form-sessao-acomp')?.addEventListener('submit', functio
   e.target.reset();
 });
 </script>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="../index.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Início
+    </a>
+    <a href="pacientes.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Pacientes
+    </a>
+    <a href="sessoes.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+      Sessões
+    </a>
+    <a href="acompanhamento.html" class="bottom-nav-item active">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
+      Protocolo
+    </a>
+    <a href="relatorios.html" class="bottom-nav-item">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
+      Relatórios
+    </a>
+  </div>
+</nav>
+
+<script src="../js/mobile.js"></script>
 </body>
 </html>
