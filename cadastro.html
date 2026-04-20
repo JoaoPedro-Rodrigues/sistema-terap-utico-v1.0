@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#5A4438">
+  <title>Criar Conta — Terapia Online</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { display:block; background: var(--cream); min-height:100vh; }
+
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Lado esquerdo — ilustração/branding ── */
+    .auth-brand {
+      background: var(--bark-dk);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-brand::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(92,122,107,.18);
+    }
+
+    .auth-brand::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(196,148,58,.10);
+    }
+
+    .auth-brand-logo {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--cream);
+      font-style: italic;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-brand-sub {
+      font-size: .78rem;
+      color: var(--sage-md);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 300;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-feature {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .auth-feature-icon {
+      width: 36px; height: 36px;
+      background: rgba(92,122,107,.3);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    .auth-feature-text p {
+      font-size: .875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 2px;
+    }
+
+    .auth-feature-text span {
+      font-size: .78rem;
+      color: rgba(255,255,255,.45);
+    }
+
+    .auth-brand-quote {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-brand-quote p {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.6;
+    }
+
+    /* ── Lado direito — formulário ── */
+    .auth-form-wrap {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;
+      overflow-y: auto;
+    }
+
+    .auth-form-header { margin-bottom: 32px; }
+
+    .auth-form-header h1 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .auth-form-header p {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .auth-form-header p a {
+      color: var(--sage);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-form-header p a:hover { text-decoration: underline; }
+
+    /* Indicador de força da senha */
+    .password-strength {
+      margin-top: 8px;
+      height: 4px;
+      background: var(--warm);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .3s ease, background .3s ease;
+      width: 0%;
+    }
+
+    .strength-label {
+      font-size: .72rem;
+      margin-top: 4px;
+      height: 16px;
+      transition: color .2s;
+    }
+
+    /* Input com ícone de validação inline */
+    .input-wrap { position: relative; }
+
+    .input-status {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: .85rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .input-status.visible { opacity: 1; }
+
+    /* Checkbox estilizado */
+    .check-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .check-group input[type=checkbox] {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: var(--white);
+      transition: all .15s;
+      position: relative;
+    }
+
+    .check-group input[type=checkbox]:checked {
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+
+    .check-group input[type=checkbox]:checked::after {
+      content: '✓';
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+    }
+
+    .check-group label {
+      font-size: .82rem;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    .check-group label a {
+      color: var(--sage);
+      text-decoration: none;
+    }
+
+    /* Steps indicator */
+    .steps-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: all .3s;
+      flex-shrink: 0;
+    }
+
+    .step-dot.active { border-color: var(--sage); background: var(--sage); color: #fff; }
+    .step-dot.done   { border-color: var(--success); background: var(--success); color: #fff; }
+
+    .step-line {
+      flex: 1; height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      transition: background .3s;
+    }
+
+    .step-line.done { background: var(--success); }
+
+    .step-label {
+      font-size: .7rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Formulário multi-step */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    /* Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .auth-divider span {
+      font-size: .75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Error messages */
+    .field-error {
+      font-size: .75rem;
+      color: var(--danger);
+      margin-top: 4px;
+      min-height: 18px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    .form-control.error { border-color: var(--danger); }
+    .form-control.success { border-color: var(--success); }
+
+    /* Toast de erro geral */
+    .auth-error {
+      background: #fde8e6;
+      border: 1px solid #f0b3ae;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: .875rem;
+      color: #a03020;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .auth-error.visible { display: flex; }
+
+    /* Sucesso */
+    .auth-success {
+      text-align: center;
+      padding: 48px 0;
+      display: none;
+    }
+    .auth-success.visible { display: block; }
+    .auth-success-icon {
+      width: 72px; height: 72px;
+      background: var(--sage-lt);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 20px;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-brand { display: none; }
+      .auth-form-wrap { padding: 40px 28px; min-height: 100vh; }
+    }
+
+    @media (max-width: 480px) {
+      .auth-form-wrap { padding: 28px 20px; }
+      .auth-form-header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-page">
+
+  <!-- ── BRANDING ── -->
+  <div class="auth-brand">
+    <div class="auth-brand-logo">Terapia<br>Online</div>
+    <div class="auth-brand-sub">Sistema Terapêutico Integrado</div>
+
+    <div class="auth-features">
+      <div class="auth-feature">
+        <div class="auth-feature-icon">💬</div>
+        <div class="auth-feature-text">
+          <p>Atendimento via WhatsApp</p>
+          <span>Porta de entrada automática para novos pacientes</span>
+        </div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">📋</div>
+        <div class="auth-feature-text">
+          <p>Prontuário digital completo</p>
+          <span>Fichas, sessões e histórico em um só lugar</span>
+        </div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">📊</div>
+        <div class="auth-feature-text">
+          <p>Protocolo de 3 meses</p>
+          <span>Acompanhamento contínuo com score emocional</span>
+        </div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">🌿</div>
+        <div class="auth-feature-text">
+          <p>Relatório final premium</p>
+          <span>Evolução com gráficos para entregar ao paciente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-brand-quote">
+      <p>"Cuidar de quem cuida começa por ter as ferramentas certas."</p>
+    </div>
+  </div>
+
+  <!-- ── FORMULÁRIO ── -->
+  <div class="auth-form-wrap">
+
+    <!-- Steps -->
+    <div class="steps-indicator" id="steps-indicator">
+      <div class="step-dot active" id="dot-1">1</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2">2</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="dot-3">3</div>
+    </div>
+
+    <div class="auth-form-header">
+      <h1 id="form-title">Criar sua conta</h1>
+      <p id="form-subtitle">
+        Já tem conta? <a href="login.html">Entrar</a>
+      </p>
+    </div>
+
+    <!-- Erro geral -->
+    <div class="auth-error" id="auth-error">
+      <span>⚠</span>
+      <span id="auth-error-msg">Erro ao criar conta.</span>
+    </div>
+
+    <form id="form-cadastro" novalidate>
+
+      <!-- ── STEP 1: Dados pessoais ── -->
+      <div class="form-step active" id="step-1">
+        <div class="form-group">
+          <label class="form-label">Nome completo <span>*</span></label>
+          <div class="input-wrap">
+            <input type="text" id="nome" class="form-control" placeholder="Dra. Maria Silva"
+                   autocomplete="name" autocapitalize="words" required>
+            <span class="input-status" id="nome-status"></span>
+          </div>
+          <p class="field-error" id="nome-error"></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">E-mail profissional <span>*</span></label>
+          <div class="input-wrap">
+            <input type="email" id="email" class="form-control" placeholder="voce@consultorio.com"
+                   autocomplete="email" required>
+            <span class="input-status" id="email-status"></span>
+          </div>
+          <p class="field-error" id="email-error"></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Senha <span>*</span></label>
+          <div class="input-wrap" style="position:relative">
+            <input type="password" id="senha" class="form-control" placeholder="Mínimo 8 caracteres + 1 número"
+                   autocomplete="new-password" required style="padding-right:40px">
+            <button type="button" id="toggle-senha"
+                    style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:2px;font-size:1rem"
+                    onclick="togglePasswordVisibility('senha', this)">👁</button>
+          </div>
+          <div class="password-strength">
+            <div class="password-strength-bar" id="strength-bar"></div>
+          </div>
+          <p class="strength-label text-muted" id="strength-label"></p>
+          <p class="field-error" id="senha-error"></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirmar senha <span>*</span></label>
+          <div class="input-wrap">
+            <input type="password" id="senha-confirm" class="form-control" placeholder="Repita a senha"
+                   autocomplete="new-password" required>
+            <span class="input-status" id="confirm-status"></span>
+          </div>
+          <p class="field-error" id="confirm-error"></p>
+        </div>
+
+        <button type="button" class="btn btn-primary w-full" onclick="irParaStep2()">
+          Continuar →
+        </button>
+
+        <div class="auth-divider"><span>ou</span></div>
+
+        <p style="text-align:center;font-size:.82rem;color:var(--muted)">
+          Ao criar uma conta você concorda com os
+          <a href="#" style="color:var(--sage);text-decoration:none">Termos de Uso</a>
+          e a
+          <a href="#" style="color:var(--sage);text-decoration:none">Política de Privacidade</a>.
+        </p>
+      </div>
+
+      <!-- ── STEP 2: Dados profissionais ── -->
+      <div class="form-step" id="step-2">
+        <div class="form-group">
+          <label class="form-label">Especialidade</label>
+          <select id="especialidade" class="form-control">
+            <option value="">Selecione (opcional)</option>
+            <option>Terapeuta Holística</option>
+            <option>Psicóloga</option>
+            <option>Terapeuta Corporal</option>
+            <option>Coach Terapêutica</option>
+            <option>Auriculoterapeuta</option>
+            <option>Terapeuta Integrativa</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">CRP / Registro profissional</label>
+          <input type="text" id="crp" class="form-control" placeholder="Ex: CRP 06/123456">
+          <p class="form-hint">Opcional — aparece no seu perfil público</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">WhatsApp / Telefone</label>
+          <input type="tel" id="telefone" class="form-control" placeholder="(00) 00000-0000"
+                 autocomplete="tel">
+        </div>
+
+        <div class="check-group">
+          <input type="checkbox" id="termos" required>
+          <label for="termos">
+            Concordo com os <a href="#">Termos de Uso</a> e a
+            <a href="#">Política de Privacidade</a> do sistema.
+          </label>
+        </div>
+        <p class="field-error" id="termos-error"></p>
+
+        <div style="display:flex;gap:12px">
+          <button type="button" class="btn btn-outline" onclick="irParaStep(1)" style="flex:0 0 auto">
+            ← Voltar
+          </button>
+          <button type="button" class="btn btn-primary w-full" onclick="irParaStep3()">
+            Criar conta →
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Carregando / Sucesso ── -->
+      <div class="form-step" id="step-3">
+        <div id="loading-state" style="text-align:center;padding:48px 0">
+          <div style="width:48px;height:48px;border:3px solid var(--sage-lt);border-top-color:var(--sage);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px"></div>
+          <p style="color:var(--muted);font-size:.9rem">Criando sua conta…</p>
+        </div>
+
+        <div class="auth-success" id="success-state">
+          <div class="auth-success-icon">🌿</div>
+          <h2 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:8px">Conta criada!</h2>
+          <p style="color:var(--muted);margin-bottom:8px">Bem-vinda ao sistema, <strong id="success-nome"></strong>.</p>
+          <p style="color:var(--muted);font-size:.875rem;margin-bottom:32px">Você já está logada e será redirecionada em instantes.</p>
+          <a href="index.html" class="btn btn-primary">Ir para o Dashboard →</a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+// ─── Estado atual do formulário ───────────────────────────────────────────
+let currentStep = 1;
+let emailVerificado = false;
+
+// ─── Step navigation ──────────────────────────────────────────────────────
+function irParaStep(n) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  document.getElementById('step-' + n).classList.add('active');
+
+  // Atualiza dots
+  for (let i = 1; i <= 3; i++) {
+    const dot  = document.getElementById('dot-' + i);
+    const line = document.getElementById('line-' + i);
+    dot.className  = 'step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+    if (line) line.className = 'step-line' + (i < n ? ' done' : '');
+  }
+
+  const titulos = ['Criar sua conta', 'Dados profissionais', 'Finalizando…'];
+  const subtitulos = [
+    'Já tem conta? <a href="login.html">Entrar</a>',
+    'Opcional, mas ajuda seus pacientes a te encontrar.',
+    ''
+  ];
+  document.getElementById('form-title').textContent = titulos[n - 1];
+  document.getElementById('form-subtitle').innerHTML = subtitulos[n - 1];
+
+  currentStep = n;
+  window.scrollTo(0, 0);
+}
+
+// ─── Validações Step 1 ────────────────────────────────────────────────────
+function setFieldState(id, ok, msg) {
+  const input   = document.getElementById(id);
+  const error   = document.getElementById(id + '-error');
+  const status  = document.getElementById(id + '-status');
+  if (!input) return;
+  input.className = 'form-control ' + (ok === true ? 'success' : ok === false ? 'error' : '');
+  if (error) {
+    error.textContent = msg || '';
+    error.className   = 'field-error' + (msg ? ' visible' : '');
+  }
+  if (status) {
+    status.textContent = ok === true ? '✓' : ok === false ? '✗' : '';
+    status.style.color = ok === true ? 'var(--success)' : 'var(--danger)';
+    status.className   = 'input-status' + (ok !== null ? ' visible' : '');
+  }
+}
+
+function validarNome() {
+  const val = document.getElementById('nome').value.trim();
+  if (val.length < 3) { setFieldState('nome', false, 'Nome deve ter pelo menos 3 caracteres.'); return false; }
+  setFieldState('nome', true, ''); return true;
+}
+
+async function validarEmail() {
+  const val = document.getElementById('email').value.trim().toLowerCase();
+  const re  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!re.test(val)) { setFieldState('email', false, 'E-mail inválido.'); emailVerificado = false; return false; }
+
+  // Verificar disponibilidade no servidor
+  try {
+    const res  = await fetch('/api/auth/verificar-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: val }),
+    });
+    const data = await res.json();
+    if (!data.disponivel) {
+      setFieldState('email', false, 'Este e-mail já está cadastrado.');
+      emailVerificado = false; return false;
+    }
+  } catch {
+    // offline — deixa passar
+  }
+
+  setFieldState('email', true, ''); emailVerificado = true; return true;
+}
+
+function avaliarSenha(senha) {
+  let score = 0;
+  if (senha.length >= 8)  score++;
+  if (senha.length >= 12) score++;
+  if (/[A-Z]/.test(senha)) score++;
+  if (/[0-9]/.test(senha)) score++;
+  if (/[^a-zA-Z0-9]/.test(senha)) score++;
+  return score;
+}
+
+document.getElementById('senha').addEventListener('input', function() {
+  const val   = this.value;
+  const score = avaliarSenha(val);
+  const bar   = document.getElementById('strength-bar');
+  const lbl   = document.getElementById('strength-label');
+  const pcts  = [0, 20, 40, 65, 82, 100];
+  const cores = ['transparent','#C45A4A','#C4943A','#C4943A','#4A8A6A','#4A8A6A'];
+  const labels = ['','Muito fraca','Fraca','Razoável','Boa','Forte'];
+  bar.style.width      = pcts[score] + '%';
+  bar.style.background = cores[score];
+  lbl.textContent      = val.length > 0 ? labels[score] : '';
+  lbl.style.color      = cores[score];
+
+  const confirmEl = document.getElementById('senha-confirm');
+  if (confirmEl.value) validarConfirmacao();
+});
+
+function validarSenha() {
+  const val = document.getElementById('senha').value;
+  if (val.length < 8) { setFieldState('senha', false, 'Senha deve ter pelo menos 8 caracteres.'); return false; }
+  if (!/[0-9]/.test(val)) { setFieldState('senha', false, 'Senha deve conter pelo menos 1 número.'); return false; }
+  setFieldState('senha', true, ''); return true;
+}
+
+function validarConfirmacao() {
+  const s1 = document.getElementById('senha').value;
+  const s2 = document.getElementById('senha-confirm').value;
+  if (!s2) { setFieldState('senha-confirm', null, ''); return false; }
+  if (s1 !== s2) { setFieldState('senha-confirm', false, 'As senhas não coincidem.'); return false; }
+  setFieldState('senha-confirm', true, ''); return true;
+}
+
+// Validação em tempo real
+document.getElementById('nome').addEventListener('blur', validarNome);
+document.getElementById('email').addEventListener('blur', validarEmail);
+document.getElementById('senha').addEventListener('blur', validarSenha);
+document.getElementById('senha-confirm').addEventListener('input', validarConfirmacao);
+
+async function irParaStep2() {
+  clearError();
+  const nomeOk    = validarNome();
+  const emailOk   = await validarEmail();
+  const senhaOk   = validarSenha();
+  const confirmOk = validarConfirmacao();
+  if (nomeOk && emailOk && senhaOk && confirmOk) irParaStep(2);
+}
+
+function irParaStep3() {
+  clearError();
+  const termos = document.getElementById('termos');
+  const termoError = document.getElementById('termos-error');
+  if (!termos.checked) {
+    termoError.textContent = 'Você precisa aceitar os Termos de Uso.';
+    termoError.className = 'field-error visible';
+    return;
+  }
+  termoError.className = 'field-error';
+  irParaStep(3);
+  enviarCadastro();
+}
+
+// ─── Toggle senha visível ──────────────────────────────────────────────────
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+// ─── Envio para API ────────────────────────────────────────────────────────
+async function enviarCadastro() {
+  const payload = {
+    nome:          document.getElementById('nome').value.trim(),
+    email:         document.getElementById('email').value.trim().toLowerCase(),
+    senha:         document.getElementById('senha').value,
+    especialidade: document.getElementById('especialidade').value,
+    crp:           document.getElementById('crp').value.trim(),
+    telefone:      document.getElementById('telefone').value.trim(),
+  };
+
+  try {
+    const res  = await fetch('/api/auth/cadastro', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      // Voltar para step 1 e mostrar erro
+      irParaStep(1);
+      if (data.campos) {
+        Object.entries(data.campos).forEach(([campo, msg]) => setFieldState(campo, false, msg));
+      } else {
+        showError(data.erro || 'Erro ao criar conta. Tente novamente.');
+      }
+      return;
+    }
+
+    // Sucesso
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('success-nome').textContent = data.usuario.nome.split(' ')[0];
+    document.getElementById('success-state').classList.add('visible');
+
+    setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+
+  } catch (err) {
+    irParaStep(1);
+    showError('Não foi possível conectar ao servidor. Verifique se o servidor está rodando.');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('auth-error');
+  document.getElementById('auth-error-msg').textContent = msg;
+  el.classList.add('visible');
+}
+
+function clearError() {
+  document.getElementById('auth-error').classList.remove('visible');
+}
+
+// Foco automático no primeiro campo
+window.addEventListener('load', () => {
+  document.getElementById('nome').focus();
+});
+</script>
+
+</body>
+</html>
