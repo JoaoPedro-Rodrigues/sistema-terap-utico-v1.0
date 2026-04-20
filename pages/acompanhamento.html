@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terapia Online — Acompanhamento</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="acompanhamento">
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Terapia<br>Online</h1>
+    <span>Sistema Terapêutico</span>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Principal</span>
+    <a href="../index.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="pacientes.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Pacientes
+    </a>
+    <a href="sessoes.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+      Sessões
+    </a>
+    <span class="nav-section-label">Protocolo</span>
+    <a href="acompanhamento.html" class="nav-item active">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
+      Acompanhamento
+    </a>
+    <a href="relatorios.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
+      Relatórios
+    </a>
+    <span class="nav-section-label">Ferramentas</span>
+    <a href="ficha.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2H5a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-6-6z"/></svg>
+      Ficha Terapêutica
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="therapist-card">
+      <div class="therapist-avatar">AL</div>
+      <div class="therapist-info">
+        <p>Dra. Ana Lima</p>
+        <span>Terapeuta Holística</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <h2 class="topbar-title">Acompanhamento — Protocolo 3 meses</h2>
+    <div class="topbar-actions">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-checkin')">+ Check-in</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <div class="alert alert-info mb-24">
+      <span>ℹ</span>
+      <div>
+        <strong>Protocolo de acompanhamento</strong><br>
+        <span>Semanas 1–4 (intensivo): 1 sessão/semana + check-ins semanais. Semanas 5–12 (manutenção): 1 sessão quinzenal + monitoramento emocional contínuo.</span>
+      </div>
+    </div>
+
+    <!-- Protocolo visual -->
+    <div class="card mb-24">
+      <div class="card-header">
+        <h3 class="card-title">Fases do protocolo</h3>
+      </div>
+      <div class="protocol-steps">
+        <div class="protocol-step done">
+          <div class="step-num">✓</div>
+          <p class="step-title">Fase 1 — Intensivo</p>
+          <p class="step-desc">Semanas 1–4 · 1 sessão/semana · Check-ins diários via WhatsApp</p>
+        </div>
+        <div class="protocol-step active">
+          <div class="step-num">2</div>
+          <p class="step-title">Fase 2 — Manutenção</p>
+          <p class="step-desc">Semanas 5–12 · Sessão quinzenal · Monitoramento emocional</p>
+        </div>
+        <div class="protocol-step">
+          <div class="step-num">3</div>
+          <p class="step-title">Fase 3 — Conclusão</p>
+          <p class="step-desc">Semana 12 · Relatório final premium · Recomendações futuras</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de pacientes em acompanhamento -->
+    <div id="acomp-lista"></div>
+
+  </div>
+</main>
+
+<!-- MODAL: Check-in -->
+<div class="modal-overlay" id="modal-checkin">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Registrar check-in</h3>
+      <button class="modal-close" onclick="closeModal('modal-checkin')">✕</button>
+    </div>
+    <form id="form-checkin">
+      <div class="alert alert-info mb-16">
+        <span>💬</span>
+        <span>Registre o check-in semanal do paciente (resposta ao WhatsApp automático).</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Paciente <span>*</span></label>
+        <select id="checkin-pac" class="form-control" required></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ansiedade (1=alta · 10=baixa) <span>*</span></label>
+          <input type="number" id="ci-ansiedade" class="form-control" min="1" max="10" placeholder="1–10" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Qualidade do sono (1–10) <span>*</span></label>
+          <input type="number" id="ci-sono" class="form-control" min="1" max="10" placeholder="1–10" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Humor geral (1–10) <span>*</span></label>
+        <input type="number" id="ci-humor" class="form-control" min="1" max="10" placeholder="1–10" required>
+        <p class="form-hint">1 = muito mal · 10 = excelente</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nota do paciente (opcional)</label>
+        <textarea id="ci-nota" class="form-control" rows="2" placeholder="O que o paciente relatou no check-in..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-checkin')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Ver paciente (reutilizado) -->
+<div class="modal-overlay" id="modal-paciente">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Ficha do paciente</h3>
+      <button class="modal-close" onclick="closeModal('modal-paciente')">✕</button>
+    </div>
+    <div id="modal-paciente-content"></div>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('modal-paciente')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Nova sessão -->
+<div class="modal-overlay" id="modal-sessao">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Registrar sessão</h3>
+      <button class="modal-close" onclick="closeModal('modal-sessao')">✕</button>
+    </div>
+    <form id="form-sessao-acomp">
+      <div class="form-group">
+        <label class="form-label">Paciente</label>
+        <select id="sessao-pac-acomp" class="form-control"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" id="sessao-data-acomp" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Técnica</label>
+          <input type="text" id="sessao-tec-acomp" class="form-control" placeholder="Técnica aplicada">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notas</label>
+        <textarea id="sessao-notas-acomp" class="form-control" rows="3"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-sessao')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script src="../js/pacientes.js"></script>
+<script src="../js/sessoes.js"></script>
+<script>
+function novaSessaoParaPaciente(id) {
+  const pacientes = DB.get('pacientes') || [];
+  const sel = document.getElementById('sessao-pac-acomp');
+  if (sel) {
+    sel.innerHTML = pacientes.map(p => `<option value="${p.id}" ${p.id === id ? 'selected' : ''}>${p.nome}</option>`).join('');
+  }
+  openModal('modal-sessao');
+}
+
+document.getElementById('form-sessao-acomp')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const sessoes   = DB.get('sessoes') || [];
+  const pacientes = DB.get('pacientes') || [];
+  const pacId     = document.getElementById('sessao-pac-acomp').value;
+  sessoes.push({
+    id: gerarId('s'),
+    pacienteId: pacId,
+    data: document.getElementById('sessao-data-acomp').value || todayStr(),
+    duracao: 60,
+    tecnica: document.getElementById('sessao-tec-acomp').value,
+    scorePre: { ansiedade: 5, humor: 5 },
+    scorePos: { ansiedade: 3, humor: 7 },
+    notas: document.getElementById('sessao-notas-acomp').value,
+    recomendacoes: '',
+    evolucao: 'Boa',
+  });
+  DB.set('sessoes', sessoes);
+  const pIdx = pacientes.findIndex(p => p.id === pacId);
+  if (pIdx >= 0) {
+    pacientes[pIdx].sessoes = (pacientes[pIdx].sessoes || 0) + 1;
+    pacientes[pIdx].semana  = Math.min((pacientes[pIdx].semana || 0) + 1, 12);
+    DB.set('pacientes', pacientes);
+  }
+  closeModal('modal-sessao');
+  renderAcompanhamento();
+  toast('Sessão registrada!');
+  e.target.reset();
+});
+</script>
+</body>
+</html>

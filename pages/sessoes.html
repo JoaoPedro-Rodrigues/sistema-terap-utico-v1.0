@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terapia Online — Sessões</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="sessoes">
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Terapia<br>Online</h1>
+    <span>Sistema Terapêutico</span>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Principal</span>
+    <a href="../index.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="pacientes.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Pacientes
+    </a>
+    <a href="sessoes.html" class="nav-item active">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+      Sessões
+    </a>
+    <span class="nav-section-label">Protocolo</span>
+    <a href="acompanhamento.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
+      Acompanhamento
+    </a>
+    <a href="relatorios.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
+      Relatórios
+    </a>
+    <span class="nav-section-label">Ferramentas</span>
+    <a href="ficha.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2H5a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-6-6z"/></svg>
+      Ficha Terapêutica
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="therapist-card">
+      <div class="therapist-avatar">AL</div>
+      <div class="therapist-info">
+        <p>Dra. Ana Lima</p>
+        <span>Terapeuta Holística</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <h2 class="topbar-title">Sessões</h2>
+    <div class="topbar-actions">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-sessao')">+ Registrar sessão</button>
+    </div>
+  </header>
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">Histórico de sessões</h3>
+          <p class="card-subtitle">Registro completo de todos os atendimentos</p>
+        </div>
+        <input type="search" id="busca-sessao" class="form-control" placeholder="Buscar por paciente..." style="width:240px">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Paciente</th>
+              <th>Técnica</th>
+              <th>Duração</th>
+              <th>Score</th>
+              <th>Evolução</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sessoes-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL: Registrar sessão -->
+<div class="modal-overlay" id="modal-sessao">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Registrar sessão</h3>
+      <button class="modal-close" onclick="closeModal('modal-sessao')">✕</button>
+    </div>
+    <form id="form-sessao">
+      <div class="form-group">
+        <label class="form-label">Paciente <span>*</span></label>
+        <select id="sessao-paciente" class="form-control" required></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data <span>*</span></label>
+          <input type="date" id="sessao-data" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duração (min)</label>
+          <input type="number" id="sessao-duracao" class="form-control" value="60" min="10" max="180">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Técnica aplicada <span>*</span></label>
+        <input type="text" id="sessao-tecnica" class="form-control" placeholder="Ex: Auriculoterapia + EFT" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ansiedade antes</label>
+          <input type="number" id="sessao-pre-ans" class="form-control" min="1" max="10" value="5">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Humor antes</label>
+          <input type="number" id="sessao-pre-humor" class="form-control" min="1" max="10" value="5">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ansiedade depois</label>
+          <input type="number" id="sessao-pos-ans" class="form-control" min="1" max="10" value="3">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Humor depois</label>
+          <input type="number" id="sessao-pos-humor" class="form-control" min="1" max="10" value="7">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notas da sessão <span>*</span></label>
+        <textarea id="sessao-notas" class="form-control" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recomendações</label>
+        <textarea id="sessao-recom" class="form-control" rows="2"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Evolução percebida</label>
+        <select id="sessao-evolucao" class="form-control">
+          <option>Boa</option>
+          <option>Moderada</option>
+          <option>Em processo</option>
+          <option>Difícil</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-sessao')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Detalhe da sessão -->
+<div class="modal-overlay" id="modal-sessao-detalhe">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Detalhes da sessão</h3>
+      <button class="modal-close" onclick="closeModal('modal-sessao-detalhe')">✕</button>
+    </div>
+    <div id="modal-sessao-detalhe-content"></div>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('modal-sessao-detalhe')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script src="../js/sessoes.js"></script>
+</body>
+</html>

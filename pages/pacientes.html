@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terapia Online — Pacientes</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="pacientes">
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Terapia<br>Online</h1>
+    <span>Sistema Terapêutico</span>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Principal</span>
+    <a href="../index.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="pacientes.html" class="nav-item active">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Pacientes
+    </a>
+    <a href="sessoes.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+      Sessões
+    </a>
+    <span class="nav-section-label">Protocolo</span>
+    <a href="acompanhamento.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
+      Acompanhamento
+    </a>
+    <a href="relatorios.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
+      Relatórios
+    </a>
+    <span class="nav-section-label">Ferramentas</span>
+    <a href="ficha.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2H5a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-6-6z"/></svg>
+      Ficha Terapêutica
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="therapist-card">
+      <div class="therapist-avatar">AL</div>
+      <div class="therapist-info">
+        <p>Dra. Ana Lima</p>
+        <span>Terapeuta Holística</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <h2 class="topbar-title">Pacientes</h2>
+    <div class="topbar-actions">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-novo-paciente')">+ Novo paciente</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">Todos os pacientes</h3>
+          <p class="card-subtitle">Gerencie cadastros, fichas e histórico</p>
+        </div>
+        <input type="search" id="busca-paciente" class="form-control" placeholder="Buscar por nome ou queixa..." style="width:280px">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Queixa</th>
+              <th>Status</th>
+              <th>Score emocional</th>
+              <th>Progresso</th>
+              <th>Sessões</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="pacientes-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL: Ver paciente -->
+<div class="modal-overlay" id="modal-paciente">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Ficha do paciente</h3>
+      <button class="modal-close" onclick="closeModal('modal-paciente')">✕</button>
+    </div>
+    <div id="modal-paciente-content"></div>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('modal-paciente')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Nova sessão -->
+<div class="modal-overlay" id="modal-sessao">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Registrar sessão</h3>
+      <button class="modal-close" onclick="closeModal('modal-sessao')">✕</button>
+    </div>
+    <form id="form-sessao">
+      <div class="form-group">
+        <label class="form-label">Paciente <span>*</span></label>
+        <select id="sessao-paciente" class="form-control" required></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data <span>*</span></label>
+          <input type="date" id="sessao-data" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duração (min)</label>
+          <input type="number" id="sessao-duracao" class="form-control" value="60" min="10" max="180">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Técnica aplicada <span>*</span></label>
+        <input type="text" id="sessao-tecnica" class="form-control" placeholder="Ex: Auriculoterapia + Escuta ativa" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ansiedade antes (1–10)</label>
+          <input type="number" id="sessao-pre-ans" class="form-control" min="1" max="10" value="5">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Humor antes (1–10)</label>
+          <input type="number" id="sessao-pre-humor" class="form-control" min="1" max="10" value="5">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ansiedade depois (1–10)</label>
+          <input type="number" id="sessao-pos-ans" class="form-control" min="1" max="10" value="3">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Humor depois (1–10)</label>
+          <input type="number" id="sessao-pos-humor" class="form-control" min="1" max="10" value="7">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notas da sessão <span>*</span></label>
+        <textarea id="sessao-notas" class="form-control" rows="3" placeholder="Observações, insights, conteúdo abordado..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recomendações</label>
+        <textarea id="sessao-recom" class="form-control" rows="2" placeholder="Práticas para casa, próximos passos..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Evolução percebida</label>
+        <select id="sessao-evolucao" class="form-control">
+          <option>Boa</option>
+          <option>Moderada</option>
+          <option>Em processo</option>
+          <option>Difícil</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-sessao')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar sessão</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Novo paciente -->
+<div class="modal-overlay" id="modal-novo-paciente">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Cadastrar paciente</h3>
+      <button class="modal-close" onclick="closeModal('modal-novo-paciente')">✕</button>
+    </div>
+    <form id="form-paciente">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nome completo <span>*</span></label>
+          <input type="text" id="pac-nome" class="form-control" placeholder="Nome do paciente" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Idade <span>*</span></label>
+          <input type="number" id="pac-idade" class="form-control" min="1" max="120" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">WhatsApp <span>*</span></label>
+          <input type="tel" id="pac-whatsapp" class="form-control" placeholder="(00) 00000-0000" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail</label>
+          <input type="email" id="pac-email" class="form-control" placeholder="email@exemplo.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Queixa principal <span>*</span></label>
+        <textarea id="pac-queixa" class="form-control" rows="2" placeholder="Descreva brevemente o motivo do atendimento..." required></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-novo-paciente')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script src="../js/pacientes.js"></script>
+<script>
+// Ajuste de caminhos para páginas internas
+document.addEventListener('DOMContentLoaded', () => {
+  const pacientes = DB.get('pacientes') || [];
+  const sel = document.getElementById('sessao-paciente');
+  if (sel) {
+    sel.innerHTML = '<option value="">Selecione o paciente</option>' +
+      pacientes.filter(p => p.status !== 'concluido').map(p =>
+        `<option value="${p.id}">${p.nome}</option>`
+      ).join('');
+  }
+  const form = document.getElementById('form-sessao');
+  if (form) form.addEventListener('submit', salvarSessao);
+});
+
+function salvarSessao(e) {
+  e.preventDefault();
+  const sessoes   = DB.get('sessoes') || [];
+  const pacientes = DB.get('pacientes') || [];
+  const pacId = document.getElementById('sessao-paciente').value;
+  const novaSessao = {
+    id: gerarId('s'),
+    pacienteId: pacId,
+    data: document.getElementById('sessao-data').value,
+    duracao: parseInt(document.getElementById('sessao-duracao').value),
+    tecnica: document.getElementById('sessao-tecnica').value,
+    scorePre: {
+      ansiedade: parseInt(document.getElementById('sessao-pre-ans').value),
+      humor: parseInt(document.getElementById('sessao-pre-humor').value),
+    },
+    scorePos: {
+      ansiedade: parseInt(document.getElementById('sessao-pos-ans').value),
+      humor: parseInt(document.getElementById('sessao-pos-humor').value),
+    },
+    notas: document.getElementById('sessao-notas').value,
+    recomendacoes: document.getElementById('sessao-recom').value,
+    evolucao: document.getElementById('sessao-evolucao').value,
+  };
+  sessoes.push(novaSessao);
+  DB.set('sessoes', sessoes);
+  const pIdx = pacientes.findIndex(p => p.id === pacId);
+  if (pIdx >= 0) {
+    pacientes[pIdx].sessoes = (pacientes[pIdx].sessoes || 0) + 1;
+    if (pacientes[pIdx].status === 'aguardando') pacientes[pIdx].status = 'ativo';
+    pacientes[pIdx].semana = Math.min((pacientes[pIdx].semana || 0) + 1, 12);
+    DB.set('pacientes', pacientes);
+  }
+  closeModal('modal-sessao');
+  renderPacientes();
+  toast('Sessão registrada com sucesso!');
+  e.target.reset();
+}
+</script>
+</body>
+</html>

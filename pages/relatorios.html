@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terapia Online — Relatórios</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="relatorios">
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Terapia<br>Online</h1>
+    <span>Sistema Terapêutico</span>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Principal</span>
+    <a href="../index.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="pacientes.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M2 17c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Pacientes
+    </a>
+    <a href="sessoes.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+      Sessões
+    </a>
+    <span class="nav-section-label">Protocolo</span>
+    <a href="acompanhamento.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h3l3-7 4 14 3-7h3"/></svg>
+      Acompanhamento
+    </a>
+    <a href="relatorios.html" class="nav-item active">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>
+      Relatórios
+    </a>
+    <span class="nav-section-label">Ferramentas</span>
+    <a href="ficha.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2H5a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-6-6z"/></svg>
+      Ficha Terapêutica
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="therapist-card">
+      <div class="therapist-avatar">AL</div>
+      <div class="therapist-info">
+        <p>Dra. Ana Lima</p>
+        <span>Terapeuta Holística</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <h2 class="topbar-title">Relatórios de evolução</h2>
+    <div class="topbar-actions">
+      <select id="rel-paciente" class="form-control" style="width:220px"></select>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- KPIs -->
+    <div class="stats-grid mb-24">
+      <div class="stat-card green">
+        <p class="stat-label">Total de pacientes</p>
+        <p class="stat-value" id="kpi-total">—</p>
+      </div>
+      <div class="stat-card sage">
+        <p class="stat-label">Ativos no protocolo</p>
+        <p class="stat-value" id="kpi-ativos">—</p>
+      </div>
+      <div class="stat-card gold">
+        <p class="stat-label">Sessões realizadas</p>
+        <p class="stat-value" id="kpi-sessoes">—</p>
+      </div>
+      <div class="stat-card bark">
+        <p class="stat-label">Score médio geral</p>
+        <p class="stat-value" id="kpi-score">—</p>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid-2 mb-24">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Evolução emocional</h3>
+          <p class="card-subtitle">Score ao longo do tempo</p>
+        </div>
+        <div style="height:240px;position:relative">
+          <canvas id="chart-evolucao"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Status dos pacientes</h3>
+          <p class="card-subtitle">Distribuição atual</p>
+        </div>
+        <div style="height:240px;position:relative">
+          <canvas id="chart-distribuicao"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela detalhada -->
+    <div class="card mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Análise por paciente</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Status</th>
+              <th>Progresso</th>
+              <th>Score</th>
+              <th>Sessões</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rel-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Relatório final (aparece quando um paciente é selecionado) -->
+    <div id="relatorio-final-card"></div>
+
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/relatorios.js"></script>
+</body>
+</html>
